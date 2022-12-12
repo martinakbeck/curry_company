@@ -93,7 +93,7 @@ def top_delivers(df1, top_asc):
 # ======================================
 # Import Dataset
 # ======================================
-df = pd.read_csv("../repos/train.csv")
+df = pd.read_csv("repos/train.csv")
 df1 = clean_code(df)
 
 
