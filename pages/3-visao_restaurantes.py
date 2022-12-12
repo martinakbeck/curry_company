@@ -239,7 +239,7 @@ with tab1:
             
     with st.container():
         st.markdown("""---""")
-        st.title('Tempo médio de entrega por cidade')
+        st.title('Distância média de entrega por cidade')
         fig = distance(df1, fig=True)
         st.plotly_chart(fig)
         
