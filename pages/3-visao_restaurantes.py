@@ -159,7 +159,7 @@ def media_desvio_tempo_tráfego(df1):
 # ======================================
 # Import Dataset
 # ======================================
-df = pd.read_csv("../repos/train.csv")
+df = pd.read_csv("repos/train.csv")
 df1 = clean_code(df)
 
 
