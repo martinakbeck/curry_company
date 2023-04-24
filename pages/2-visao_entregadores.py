@@ -103,7 +103,7 @@ df1 = clean_code(df)
 # ======================================
 st.header('Marketplace - Visão Entregadores')
 
-image = Image.open('logo.png')
+image = Image.open('img/logo1.png')
 st.sidebar.image(image, width=120)
 
 st.sidebar.markdown('# Cury Company')
@@ -139,70 +139,67 @@ df1 = df1.loc[linhas_selecionadas, :]
 ### Layout
 # ======================================
 
-tab1, tab2, tab3 = st.tabs(['Visão Gerencial', '_', '_'])
+with st.container():
+    st.title('Métricas Gerais')
+    col1, col2, col3, col4 = st.columns(4, gap='large')
+    with col1:
+        maior_idade =  df1.loc[:, 'Delivery_person_Age' ].max()
+        col1.metric('Maior idade', maior_idade)
 
-with tab1:
+    with col2:
+        menor_idade = df1.loc[:, 'Delivery_person_Age' ].min()
+        col2.metric('Menor idade', menor_idade)
+        
+    with col3:
+        veiculo_melhor = df1.loc[:, 'Vehicle_condition' ].max()
+        col3.metric('Melhor condição de veículos', veiculo_melhor)
+        
+    with col4:
+        veiculo_pior = df1.loc[:, 'Vehicle_condition' ].min()
+        col4.metric('Pior condição de veículos', veiculo_pior)
+
     with st.container():
-        st.title('Métricas Gerais')
-        col1, col2, col3, col4 = st.columns(4, gap='large')
+        st.markdown("""---""")
+        st.title('Avaliações')
+        col1, col2 = st.columns(2)
         with col1:
-            maior_idade =  df1.loc[:, 'Delivery_person_Age' ].max()
-            col1.metric('Maior idade', maior_idade)
-
+            st.subheader('Avaliação por entregadores')
+            avaliacao_media = (df1.loc[:, ['Delivery_person_ID', 'Delivery_person_Ratings']]
+                                .groupby('Delivery_person_ID').mean().reset_index())
+            st.dataframe(avaliacao_media)
+            
         with col2:
-            menor_idade = df1.loc[:, 'Delivery_person_Age' ].min()
-            col2.metric('Menor idade', menor_idade)
+            st.subheader('Avaliação por trânsito')
+            avaliacao_agg_veiculo = (df1.loc[:, ['Road_traffic_density', 'Delivery_person_Ratings']]
+                                        .groupby('Road_traffic_density')
+                                        .agg({'Delivery_person_Ratings' : ('mean', 'std')}))
+            avaliacao_agg_veiculo.columns = ['delivery_mean', 'delivery_std']
+            avaliacao_agg_veiculo.reset_index()  
             
-        with col3:
-            veiculo_melhor = df1.loc[:, 'Vehicle_condition' ].max()
-            col3.metric('Melhor condição de veículos', veiculo_melhor)
+            st.dataframe(avaliacao_agg_veiculo)
             
-        with col4:
-            veiculo_pior = df1.loc[:, 'Vehicle_condition' ].min()
-            col4.metric('Pior condição de veículos', veiculo_pior)
-    
-        with st.container():
-            st.markdown("""---""")
-            st.title('Avaliações')
-            col1, col2 = st.columns(2)
-            with col1:
-                st.subheader('Avaliação por entregadores')
-                avaliacao_media = (df1.loc[:, ['Delivery_person_ID', 'Delivery_person_Ratings']]
-                                   .groupby('Delivery_person_ID').mean().reset_index())
-                st.dataframe(avaliacao_media)
-                
-            with col2:
-                st.subheader('Avaliação por trânsito')
-                avaliacao_agg_veiculo = (df1.loc[:, ['Road_traffic_density', 'Delivery_person_Ratings']]
-                                         .groupby('Road_traffic_density')
-                                         .agg({'Delivery_person_Ratings' : ('mean', 'std')}))
-                avaliacao_agg_veiculo.columns = ['delivery_mean', 'delivery_std']
-                avaliacao_agg_veiculo.reset_index()  
-                
-                st.dataframe(avaliacao_agg_veiculo)
-                
-                st.subheader('Avaliação média por clima')
-                avaliacao_agg_climaticas = (df1.loc[:, ['Weatherconditions', 'Delivery_person_Ratings']]
-                                            .groupby('Weatherconditions')
-                                             .agg({'Delivery_person_Ratings' : ('mean', 'std')}))
-                avaliacao_agg_climaticas.columns = ['delivery_mean', 'delivery_std']
-                avaliacao_agg_climaticas.reset_index()
-                
-                st.dataframe(avaliacao_agg_climaticas)
-                
-        with st.container():
-            st.markdown("""---""")
-            st.title('Velocidade de entrega')
-            col1, col2 = st.columns(2)
-            with col1:
-                st.subheader('Top entregadores mais rápidos')
-                df3 = top_delivers(df1, top_asc=True)
-                st.dataframe(df3)
-                
-            with col2:
-                st.subheader('Top Entregadores mais lentos')
-                df3 = top_delivers(df1, top_asc=False)
-                st.dataframe(df3)
+            st.subheader('Avaliação média por clima')
+            avaliacao_agg_climaticas = (df1.loc[:, ['Weatherconditions', 'Delivery_person_Ratings']]
+                                        .groupby('Weatherconditions')
+                                            .agg({'Delivery_person_Ratings' : ('mean', 'std')}))
+            avaliacao_agg_climaticas.columns = ['delivery_mean', 'delivery_std']
+            avaliacao_agg_climaticas.reset_index()
+            
+            st.dataframe(avaliacao_agg_climaticas)
+            
+    with st.container():
+        st.markdown("""---""")
+        st.title('Velocidade de entrega')
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader('Top entregadores mais rápidos')
+            df3 = top_delivers(df1, top_asc=True)
+            st.dataframe(df3)
+            
+        with col2:
+            st.subheader('Top Entregadores mais lentos')
+            df3 = top_delivers(df1, top_asc=False)
+            st.dataframe(df3)
                 
 
     

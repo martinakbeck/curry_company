@@ -168,7 +168,7 @@ df1 = clean_code(df)
 # ======================================
 st.header('Marketplace - Visão Restaurantes')
 
-image = Image.open('logo.png')
+image = Image.open('img/logo1.png')
 st.sidebar.image(image, width=120)
 
 st.sidebar.markdown('# Cury Company')
@@ -204,76 +204,73 @@ df1 = df1.loc[linhas_selecionadas, :]
 ### Layout
 # ======================================
 
-tab1, tab2, tab3 = st.tabs(['Visão Gerencial', '-', '-'])
-
-with tab1:
-    with st.container():
-        st.title('Métricas Gerais')
-        
-        col1, col2, col3, col4, col5, col6 = st.columns(6)
-        
-        with col1:
-            entregadores_unicos = len(df1.loc[:, 'Delivery_person_ID'].unique())
-            col1.metric('Entregadores únicos', entregadores_unicos)
-            
-        with col2:
-            distancia_media = distance(df1, fig=False)
-            col2.metric('Distância média das entregas', distancia_media)
+with st.container():
+    st.title('Métricas Gerais')
     
-        with col3:
-            df_aux = media_desvio_tempo_entrega(df1, 'Yes', 'media_time')
-            col3.metric('Tempo Médio de Entrega com Festival', df_aux)
-            
-        with col4:
-            df_aux = media_desvio_tempo_entrega(df1, 'Yes', 'desvio_time')
-            col4.metric('Desvio Padrão de Entrega com Festival', df_aux)
-            
-        with col5:
-            df_aux = media_desvio_tempo_entrega(df1, 'No', 'media_time')
-            col5.metric('Tempo Médio de Entrega sem Festival', df_aux)
-            
-        with col6:
-            df_aux = media_desvio_tempo_entrega(df1, 'No', 'desvio_time')
-            col6.metric('Desvio Padrão de Entrega sem Festival', df_aux)
-            
-            
-    with st.container():
-        st.markdown("""---""")
-        st.title('Distância média de entrega por cidade')
-        fig = distance(df1, fig=True)
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    
+    with col1:
+        entregadores_unicos = len(df1.loc[:, 'Delivery_person_ID'].unique())
+        col1.metric('Entregadores únicos', entregadores_unicos)
+        
+    with col2:
+        distancia_media = distance(df1, fig=False)
+        col2.metric('Distância média das entregas', distancia_media)
+
+    with col3:
+        df_aux = media_desvio_tempo_entrega(df1, 'Yes', 'media_time')
+        col3.metric('Tempo Médio de Entrega com Festival', df_aux)
+        
+    with col4:
+        df_aux = media_desvio_tempo_entrega(df1, 'Yes', 'desvio_time')
+        col4.metric('Desvio Padrão de Entrega com Festival', df_aux)
+        
+    with col5:
+        df_aux = media_desvio_tempo_entrega(df1, 'No', 'media_time')
+        col5.metric('Tempo Médio de Entrega sem Festival', df_aux)
+        
+    with col6:
+        df_aux = media_desvio_tempo_entrega(df1, 'No', 'desvio_time')
+        col6.metric('Desvio Padrão de Entrega sem Festival', df_aux)
+        
+        
+with st.container():
+    st.markdown("""---""")
+    st.title('Distância média de entrega por cidade')
+    fig = distance(df1, fig=True)
+    st.plotly_chart(fig)
+    
+    
+    
+with st.container():
+    st.markdown("""---""")
+    st.title('Distribuição do Tempo')       
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:          
+        fig = media_desvio_tempo_grafico(df1)
         st.plotly_chart(fig)
         
+    with col2:            
+        fig = media_desvio_tempo_tráfego(df1)
+        st.plotly_chart(fig)
         
-        
-    with st.container():
-        st.markdown("""---""")
-        st.title('Distribuição do Tempo')       
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:          
-            fig = media_desvio_tempo_grafico(df1)
-            st.plotly_chart(fig)
+                    
+with st.container():
+    st.markdown("""---""")
+    st.title('Distribuição da distância')
+    
+    df_aux = (df1.loc[:, ['City', 'Time_taken(min)', 'Type_of_order']]
+                .groupby(['City', 'Type_of_order'])
+                .agg({'Time_taken(min)': ['mean', 'std']}))
+    
+    df_aux.columns=['distancia_media', 'distancia_desvio']
+    
+    df_aux = df_aux.reset_index()
+    
+    st.dataframe(df_aux)
             
-        with col2:            
-            fig = media_desvio_tempo_tráfego(df1)
-            st.plotly_chart(fig)
-            
-                      
-    with st.container():
-        st.markdown("""---""")
-        st.title('Distribuição da distância')
-        
-        df_aux = (df1.loc[:, ['City', 'Time_taken(min)', 'Type_of_order']]
-                  .groupby(['City', 'Type_of_order'])
-                  .agg({'Time_taken(min)': ['mean', 'std']}))
-        
-        df_aux.columns=['distancia_media', 'distancia_desvio']
-        
-        df_aux = df_aux.reset_index()
-        
-        st.dataframe(df_aux)
-               
-        
+    
         
         

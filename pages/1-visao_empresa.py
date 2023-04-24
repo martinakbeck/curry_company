@@ -83,7 +83,8 @@ def order_metric(df1):
     df_aux = df1.loc[:, cols].groupby("Order_Date").count().reset_index()
 
     #gráfico
-    fig = px.bar(df_aux, x='Order_Date', y='ID')
+    fig = px.bar(df_aux, x='Order_Date', y='ID',
+                 labels={'ID': 'Quantidade de pedidos', 'Order_Date':'Data'})
     return fig
 
 def traffic_order_share(df1):
@@ -93,7 +94,7 @@ def traffic_order_share(df1):
               .count().reset_index())
     df_aux['perc_ID'] = 100 * ( df_aux['ID'] / df_aux['ID'].sum() )
     # gráfico
-    fig = px.pie( df_aux, values='perc_ID', names='Road_traffic_density' )
+    fig = px.pie( df_aux, values='perc_ID', names='Road_traffic_density')
                
     return fig
 
@@ -103,7 +104,8 @@ def traffic_order_city(df1):
               .groupby( 'Road_traffic_density' )
               .count().reset_index())
     # gráfico
-    fig = px.scatter( df_aux, x='City', y='Road_traffic_density', size='ID', color='City' )
+    fig = px.scatter( df_aux, x='City', y='Road_traffic_density', size='ID', color='City',
+                    labels={'Road_traffic_density' : 'Densidade do tráfego', 'City' : 'Cidade'})
     return fig
 
 def order_by_week(df1):
@@ -134,7 +136,9 @@ def country_maps(df1):
         folium.Marker( [location_info['Delivery_location_latitude'],
                         location_info['Delivery_location_longitude']],
                         popup=location_info[['City', 'Road_traffic_density']] ).add_to( map )
-        folium_static( map, width=1024 , height=600 )
+    folium_static( map, width=1024 , height=600 )
+    
+    return map
 
 # ------------------------------------ Início da Estrutura lógica do código ------------------------------------ #
 
@@ -150,7 +154,7 @@ df1 = clean_code(df)
 # ======================================
 st.header('Marketplace - Visão Cliente')
 
-image = Image.open('logo.png')
+image = Image.open('img/logo1.png')
 st.sidebar.image(image, width=120)
 
 st.sidebar.markdown('# Cury Company')
@@ -158,7 +162,7 @@ st.sidebar.markdown('### Fastest Delivery in Town')
 st.sidebar.markdown("""---""")
 st.sidebar.markdown('## Selecione uma data limite')
 date_slider = st.sidebar.slider(
-    'Até qual valor?',
+    'Até que data?',
     value=pd.datetime(2022, 4, 13),
     min_value=pd.datetime(2022, 2, 11),
     max_value=pd.datetime(2022, 4, 6),
