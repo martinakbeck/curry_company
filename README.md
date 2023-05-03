@@ -7,6 +7,32 @@ A empresa realiza negócios entre restaurantes, entregadores e pessoas, e gera m
 
 A Cury Company possui um modelo de negócio chamado Marketplace, que faz o intermédio do negócio entre três clientes principais: restaurantes, entregadores e pessoas compradoras. Para acompanhar o crescimento desses negócios, o CEO gostaria de ver as seguintes métricas de crescimento:
 
+## 1.0 Problema de Negócio
+
+## 2.0 Premissas de Negócio
+
+## 3.0 Estratégia da Solução
+
+1. Definir o objetivo
+2. Coleta de dados
+3. Limpeza de dados
+4. Análise exploratória de dados
+5. Responder às perguntas do CEO
+6. Criação do dashboard
+
+### 3.1 Produto Final
+Dashboard interativo que possa ser acessado tanto do computador quanto do celular.
+### 3.2 Ferramentas Utilizadas
+* **Linguagem:** Python
+* **IDE:** Jupyter Notebook e VScode
+* **Nuvem:** Streamlitcloud
+* **Bibliotecas:** Pandas, Numpy, Plotly, Haversine, Folium, Streamlit
+
+### 3.3 Top 3 Insights
+
+## 4.0 Conclusões
+## 5.0 Próximos Passos
+
 ## Do lado da empresa:
 **1.** Quantidade de pedidos por dia.
 
